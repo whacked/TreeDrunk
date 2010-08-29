@@ -1,6 +1,7 @@
+# gave up figuring out how to do a backreference for begin_[\w]+ -- doesn't seem worth the trouble at the moment >:-(
 grammar OrgMode
   rule document
-    (headline / hyperlink / codetext / boldtext / underlinedtext / italicstext / verbatimtext / horizontalrule / word / paragraphbreak / whitespace / line)* {
+    (headline / specialblocksource / specialblockquote / specialblockcatchall / comment / listunordered / listordered / hyperlink / codetext / boldtext / underlinedtext / italicstext / verbatimtext / horizontalrule / word / paragraphbreak / whitespace / line)* {
         def content
             elements.map{ |e| e.content }
         end
@@ -8,7 +9,7 @@ grammar OrgMode
   end
 
   rule EOL
-    "\n" {
+    ("\n" / "\r\n") {
         def content
             [:EOL, text_value]
         end
@@ -134,4 +135,53 @@ grammar OrgMode
         end
     }
   end
+
+  rule specialblockcatchall
+    "#+" ("begin" / "BEGIN") (!EOL .)* EOL (!"#+end" !"#+END" .)* ("#+end" / "#+END") (!EOL .)* EOL {
+        def content
+            [:specialblockcatchall, text_value]
+        end
+    }
+  end
+    
+  rule specialblockquote
+    "#+" ("begin_quote" / "BEGIN_QUOTE") (!EOL .)* EOL (!"#+end_quote" !"#+END_QUOTE" .)* ("#+end_quote" / "#+END_QUOTE") (!EOL [\s])* EOL {
+        def content
+            [:specialblockquote, text_value]
+        end
+    }
+  end
+    
+  rule specialblocksource
+    "#+" ("begin_src" / "BEGIN_SRC") (!EOL .)* EOL (!"#+end_src" !"#+END_SRC" .)* ("#+end_src" / "#+END_SRC") (!EOL [\s])* EOL {
+        def content
+            [:specialblocksource, text_value]
+        end
+    }
+  end
+    
+  rule comment
+    EOL? "#" (!EOL .)+ EOL {
+        def content
+            [:comment, text_value]
+        end
+    }
+  end
+    
+  rule listunordered
+    whitespace+ ("-" / "+") whitespace+ (!EOL .)+ {
+        def content
+            [:listunordered, text_value]
+        end
+    }
+  end
+    
+  rule listordered
+    whitespace+ [0-9]+ ("." / ")") whitespace+ (!EOL .)+ {
+        def content
+            [:listordered, text_value]
+        end
+    }
+  end
+    
 end

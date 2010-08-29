@@ -16,3 +16,40 @@ it is shown that orgmode does indeed render on github. However, we expect a hori
 
 do we get a horizontal rule?
 
+Not as of this commit, whichever working branch of org-ruby is in use here.
+
+* Current markup elements supported by this parser:
+
+headings (levels 1~6 become h1~h6, beyond that reverts to span)
+
+bold
+
+underline
+
+italic
+
+code
+
+verbatim
+
+horizontal rule
+
+hyperlink
+
+* Unsupported markup elements:
+
+lists
+
+* Anything beyond markup is unsupported!
+
+like drawers, code blocks, todo lists, and everything else
+
+* Dependencies
+
+treetop rubygem
+
+* Usage
+
+see [[test.rb]]; =ruby test.rb= will output a converted html sample
+
+

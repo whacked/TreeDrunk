@@ -1,41 +1,11 @@
-system("tt orgmode.treetop")
-
 require "treetop"
 
-load "orgmode.rb"
+Treetop.load "orgmode"
+
 load "writer.rb"
-
-
 parser = OrgModeParser.new
 
-text = <<HEREDOC
-This file to demonstrate org markup
-
-* heading
-***** subsubsubsubheading
-
-*bold* inline *bold* with text *bold*
-inline _underline_ with text
-inline /italic!/ with text
-inline =code=  with text
-inline ~verbatim~ with text
-
-HR should appear below:
---------
-HR should appear above:
-
-
----
-
-hello
-
-[[file:ruby.org][ruby]]
-
-
-interspersed [[file:ruby.org][ruby]] link
-
-
-HEREDOC
+text = File.read("syntax.org")
 
 parsed = parser.parse(text)
 
