@@ -8,3 +8,11 @@ Currently it seems like [[http://github.com/bdewey/org-ruby][org-ruby]] is *the*
 
 In interest of writing as little code as possible and hopefully, easily allowing markup rendering support for [[http://mwolson.org/projects/EmacsMuse.html][EmacsMuse]] markup, TreeDrunk uses [[http://treetop.rubyforge.org/][TreeTop]] to create a parser factory. Then you feed it into a renderer factory, or something.
 
+*** IZ IN UR GITHUB TESTING UR MARKUPZ
+
+it is shown that orgmode does indeed render on github. However, we expect a horizontal rule here:
+
+-----
+
+do we get a horizontal rule?
+

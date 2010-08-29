@@ -1,0 +1,137 @@
+grammar OrgMode
+  rule document
+    (headline / hyperlink / codetext / boldtext / underlinedtext / italicstext / verbatimtext / horizontalrule / word / paragraphbreak / whitespace / line)* {
+        def content
+            elements.map{ |e| e.content }
+        end
+    }
+  end
+
+  rule EOL
+    "\n" {
+        def content
+            [:EOL, text_value]
+        end
+    }
+  end
+  
+  rule paragraphbreak
+    EOL EOL+ {
+        def content
+            [:paragraphbreak, text_value]
+        end
+    }
+  end
+
+  rule whitespace
+    [\s]+ {
+        def content
+            [:whitespace, text_value]
+        end
+    }
+  end
+
+  rule asterisk
+    [*] {
+        def content
+            [:asterisk, text_value]
+        end
+    }
+  end
+
+  rule nonasterisk
+    [^*] {
+        def content
+            [:nonasterisk, text_value]
+        end
+    }
+  end
+  
+  rule headline
+    asterisk+ [\s]+ (!EOL .)+ EOL {
+        def content
+            [:headline, text_value[0...-1]]
+        end
+    }
+  end
+  
+  rule line
+    (!EOL .)* EOL {
+        def content
+            [:line, text_value]
+        end
+    }
+  end
+
+  rule boldtext
+    "*" (!"*" .)+ "*" {
+        def content
+            [:boldtext, text_value[1...-1]]
+        end
+    }
+  end
+
+  rule codetext
+    "=" (!"=" .)+ "=" {
+        def content
+            [:codetext, text_value[1...-1]]
+        end
+    }
+  end
+
+  rule underlinedtext
+    "_" (!"_" .)+ "_" {
+        def content
+            [:underlinedtext, text_value[1...-1]]
+        end
+    }
+  end
+
+  rule italicstext
+    "/" (!"/" .)+ "/" {
+        def content
+            [:italicstext, text_value[1...-1]]
+        end
+    }
+  end
+
+  rule verbatimtext
+    "~" (!"~" .)+ "~" {
+        def content
+            [:verbatimtext, text_value[1...-1]]
+        end
+    }
+  end
+  
+  rule word
+    (!EOL ![\s] .)+ {
+        def content
+            [:word, text_value]
+        end
+    }
+  end
+
+  rule plaintext
+    (!EOL .)+ {
+        def content
+            [:plaintext, text_value]
+        end
+    }
+  end
+
+  rule horizontalrule
+    "-----" "-"* EOL {
+        def content
+            [:horizontalrule, text_value]
+        end
+    }
+  end
+
+  rule hyperlink
+    "[[" (!"]]" .)+ "]]" {
+        def content
+            [:hyperlink, text_value]
+        end
+    }
+  end
+end
