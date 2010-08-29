@@ -38,7 +38,7 @@ module TreeTopWriter
     end
 
     def flush_buffer
-      puts "FLUSHING BUFFER " + ">" * 80 if DEBUGMODE
+      DEBUGMODE and puts "FLUSHING BUFFER " + ">" * 80
 
       if not @buffer.empty?
         case @current_mode
@@ -137,9 +137,7 @@ module TreeTopWriter
       end
       @current_mode = mode_of type
       
-      if DEBUGMODE
-        puts ("<" * 100) + "CURRENT MODE: #{@current_mode}"
-      end
+      DEBUGMODE and puts ("<" * 100) + "CURRENT MODE: #{@current_mode}"
     end
   end
 
@@ -149,7 +147,7 @@ module TreeTopWriter
     end
 
     def to_html
-      puts @treetop if DEBUGMODE
+      DEBUGMODE and puts @treetop
 
       renderer = HTMLRenderer.new
 
