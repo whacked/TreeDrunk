@@ -60,3 +60,17 @@ Here are 2 kinds of links: [[link-no-description]] does not contain a descriptio
 hello world!
 #+end_src
 
+** horizontal rule:
+
+this is:
+
+-----
+
+this is too:
+
+----------
+
+this is not:
+
+---
+

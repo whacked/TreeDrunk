@@ -5,7 +5,8 @@ Treetop.load "orgmode"
 load "writer.rb"
 parser = OrgModeParser.new
 
-text = File.read("syntax.org")
+infile = ARGV.first and (File.exist? infile) or infile = "syntax.org"
+text = File.read(infile)
 
 parsed = parser.parse(text)
 

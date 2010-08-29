@@ -36,9 +36,11 @@ horizontal rule
 
 hyperlink
 
+ordered/unordered lists
+
 * Unsupported markup elements:
 
-lists
+bullet lists beginning with *
 
 * Anything beyond markup is unsupported!
 
@@ -50,6 +52,6 @@ treetop rubygem
 
 * Usage
 
-see [[test.rb]]; =ruby test.rb= will output a converted html sample
+see [[test.rb]]; =ruby test.rb= will output a converted html version of syntax.org
 
 
