@@ -50,8 +50,8 @@ like drawers, code blocks, todo lists, and everything else
 
 treetop rubygem
 
-* Usage
+* Usage see [[test.rb]]
 
-see [[test.rb]]; =ruby test.rb= will output a converted html version of syntax.org
-
+  - =ruby test.rb= will output a converted html version of syntax.org
+  - =ruby test.rb yourfilename.org=
 
