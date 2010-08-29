@@ -70,7 +70,7 @@ module TreeTopWriter
       end
       
       if mode_of(type) != @current_mode
-        puts "FLUSHING SINCE CHANGE MODE from #{@current_mode} ----> #{mode_of type}" + "+"*80 if DEBUGMODE
+        DEBUGMODE and puts "FLUSHING SINCE CHANGE MODE from #{@current_mode} ----> #{mode_of type}" + "+"*80
         flush_buffer
       end
       case type
