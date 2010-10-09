@@ -1,14 +1,26 @@
-* TreeDrunk: to create parsers for markup renderers using TreeTop
+* Treetop seems to be the wrong tool
 
-  - I cannot think of a good name so I don't! care,
+Realizing we need support for links in lists and headlines I think we hit a wall.
 
-* Please support my org-markup mister github,
+I can't think of a way to easily nest the parsed elements. i.e., when you have a hyperlink in a headline, make the parser return [:headline, [[:word, "this"], [:word, "is"], [:word, "a"], [:hyperlink, "[[link]]"]]]
+
+That seems to be the job of writer.rb, but that also requires to parse recursively (first parse headline, then within headline, apply again the parser to extract links).
+
+Plus the lack of backreferences (or I cannot find it easily)... ROI seems at this point higher to write a domain specific parser :-(
+
+* kept for posterity
+
+** TreeDrunk: to create parsers for markup renderers using TreeTop
+
+   - I cannot think of a good name so I don't! care,
+
+** Please support my org-markup mister github,
 
 Currently it seems like [[http://github.com/bdewey/org-ruby][org-ruby]] is *the* way to render org-mode documents from ruby (see [[http://github.com/github/gollum][gollum]]), but org-ruby's support of org-markup is incomplete.
 
 In interest of writing as little code as possible and hopefully, easily allowing markup rendering support for [[http://mwolson.org/projects/EmacsMuse.html][EmacsMuse]] markup, TreeDrunk uses [[http://treetop.rubyforge.org/][TreeTop]] to create a parser factory. Then you feed it into a renderer factory, or something.
 
-*** IZ IN UR GITHUB TESTING UR MARKUPZ
+**** IZ IN UR GITHUB TESTING UR MARKUPZ
 
 it is shown that orgmode does indeed render on github. However, we expect a horizontal rule here:
 
@@ -18,7 +30,7 @@ do we get a horizontal rule?
 
 Not as of this commit, whichever working branch of org-ruby is in use here.
 
-* Current markup elements supported by this parser:
+** Current markup elements supported by this parser:
 
 headings (levels 1~6 become h1~h6, beyond that reverts to span)
 
@@ -38,23 +50,23 @@ hyperlink
 
 ordered/unordered lists
 
-* Unsupported markup elements:
+** Unsupported markup elements:
 
 bullet lists beginning with *
 
-* Anything beyond markup is unsupported!
+** Anything beyond markup is unsupported!
 
 like drawers, todo lists, and everything else
 
-* Dependencies
+** Dependencies
 
 treetop rubygem
 
-* issues
+** issues
 
 can't get backreference to work. it may not be available at all. to my knowledge this only affects the amount of grammar needed for the various org-mode special blocks, so it shouldn't be a big problem
 
-* Usage see [[test.rb]]
+** Usage see [[test.rb]]
 
   - =ruby test.rb= will output a converted html version of syntax.org
   - =ruby test.rb yourfilename.org=
