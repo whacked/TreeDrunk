@@ -129,7 +129,7 @@ grammar OrgMode
   end
 
   rule hyperlink
-    "[[" (!"]]" .)+ "]]" {
+    "[[" (!"]" .)+ ("][" (!"]" .)+)? "]]" {
         def content
             [:hyperlink, text_value]
         end
