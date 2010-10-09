@@ -4,6 +4,7 @@ module TreeTopWriter
   class HTMLRenderer
     def initialize
       @buffer = ""
+      @buffer_attr = {}
       @ls_output = []
       @current_mode = nil
     end
@@ -47,15 +48,16 @@ module TreeTopWriter
         when :listordered
           @ls_output << tag({:tag => "ol"}, @buffer) << "\n"
         when :specialblocksource
-          @ls_output << tag({:tag => "code"}, @buffer) << "\n"
+          @ls_output << tag(@buffer_attr.merge({:tag => "div"}), @buffer) << "\n"
         when :specialblockquote
-          @ls_output << tag({:tag => "blockquote"}, @buffer) << "\n"
+          #@ls_output << tag({:tag => "blockquote"}, @buffer) << "\n"
         when :specialblockcatchall
           @ls_output << tag({:tag => "div"}, @buffer) << "\n"
         else
           @ls_output << tag({:tag => "p"}, @buffer) << "\n"
         end
         @buffer = ""
+        @buffer_attr = {}
       end
     end
 
@@ -126,7 +128,12 @@ module TreeTopWriter
       when :specialblocksource, :specialblockquote, :specialblockcatchall
         flush_buffer
         content.split(/\r?\n/).each do |line|
-          if not line.start_with? "#" then
+          if line.start_with? "#" then
+            spl_line = line.split
+            if spl_line[0].downcase == "#+begin_src" then
+              @buffer_attr["class"] = "srclang-#{spl_line[1]}"
+            end
+          else
             @buffer += line + "\n"
           end
         end
