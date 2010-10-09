@@ -1,7 +1,7 @@
-# gave up figuring out how to do a backreference for begin_[\w]+ -- doesn't seem worth the trouble at the moment >:-(
+# wrt backreferencing, nathan sobo said in 2008 it isn't yet possible. not sure if it has become available
 grammar OrgMode
   rule document
-    (headline / specialblocksource / specialblockquote / specialblockcatchall / comment / listunordered / listordered / hyperlink / codetext / boldtext / underlinedtext / italicstext / verbatimtext / horizontalrule / word / paragraphbreak / whitespace / line)* {
+    (headline / specialblock / comment / list / mixedtext / word / paragraphbreak / multiwhitespace / line)* {
         def content
             elements.map{ |e| e.content }
         end
@@ -24,10 +24,10 @@ grammar OrgMode
     }
   end
 
-  rule whitespace
+  rule multiwhitespace
     [\s]+ {
         def content
-            [:whitespace, text_value]
+            [:multiwhitespace, text_value]
         end
     }
   end
@@ -48,20 +48,51 @@ grammar OrgMode
     }
   end
   
+  rule mixedLineUntilEOL
+    multiwhitespace (mixedtext / (!EOL .))+
+  end
+
   rule headline
-    asterisk+ [\s]+ (!EOL .)+ EOL {
+    asterisk+ mixedLineUntilEOL EOL {
         def content
             [:headline, text_value[0...-1]]
         end
     }
   end
   
+  rule list
+    (listunordered / listordered)
+  end
+
+  rule listunordered
+    multiwhitespace ("-" / "+") mixedLineUntilEOL {
+        def content
+            [:listunordered, text_value]
+        end
+    }
+  end
+    
+  rule listordered
+    multiwhitespace [0-9]+ ("." / ")") mixedLineUntilEOL {
+        def content
+            [:listordered, text_value]
+        end
+    }
+  end
+    
   rule line
     (!EOL .)* EOL {
         def content
             [:line, text_value]
         end
     }
+  end
+
+
+  ### v--- plaintext rules ---v
+
+  rule mixedtext
+    (hyperlink / codetext / boldtext / underlinedtext / italicstext / verbatimtext / horizontalrule / word)
   end
 
   rule boldtext
@@ -136,6 +167,10 @@ grammar OrgMode
     }
   end
 
+  rule specialblock
+    (specialblocksource / specialblockquote / specialblockcatchall)
+  end
+
   rule specialblockcatchall
     "#+" ("begin" / "BEGIN") (!EOL .)* EOL (!"#+end" !"#+END" .)* ("#+end" / "#+END") (!EOL .)* EOL {
         def content
@@ -164,22 +199,6 @@ grammar OrgMode
     EOL? "#" (!EOL .)+ EOL {
         def content
             [:comment, text_value]
-        end
-    }
-  end
-    
-  rule listunordered
-    whitespace+ ("-" / "+") whitespace+ (!EOL .)+ {
-        def content
-            [:listunordered, text_value]
-        end
-    }
-  end
-    
-  rule listordered
-    whitespace+ [0-9]+ ("." / ")") whitespace+ (!EOL .)+ {
-        def content
-            [:listordered, text_value]
         end
     }
   end
