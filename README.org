@@ -44,11 +44,15 @@ bullet lists beginning with *
 
 * Anything beyond markup is unsupported!
 
-like drawers, code blocks, todo lists, and everything else
+like drawers, todo lists, and everything else
 
 * Dependencies
 
 treetop rubygem
+
+* issues
+
+can't get backreference to work. it may not be available at all. to my knowledge this only affects the amount of grammar needed for the various org-mode special blocks, so it shouldn't be a big problem
 
 * Usage see [[test.rb]]
 
